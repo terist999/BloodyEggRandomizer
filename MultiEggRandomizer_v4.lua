@@ -1,53 +1,36 @@
 -- MultiEggRandomizer_v4.lua
 -- Created by Blood.lust (@terist999)
 -- Includes Common, Uncommon, Rare, Legendary, Mythical, Divine, Anti-Bee, Lunar Glow, Unobtainable categories
--- Dropdown to select pet category, plus toggle (𝕱), sound, and 10s timer
+-- Dropdown to select pet category, plus toggle (🅱️), sound, and 10s timer
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
 -- Pet lists by category
 local petCategories = {
-    ["Common"] = {
-        "Bunny", "Dog", "Golden Lab"
-    },
-    ["Uncommon"] = {
-        "Black Bunny", "Cat", "Chicken", "Deer"
-    },
-    ["Rare"] = {
-        "Monkey", "Orange Tabby", "Pig", "Rooster", "Spotted Deer"
-    },
-    ["Legendary"] = {
-        "Cow", "Polar Bear", "Sea Otter", "Silver Monkey", "Turtle"
-    },
-    ["Mythical"] = {
-        "Brown Mouse", "Caterpillar", "Giant Ant", "Grey Mouse", "Praying Mantis",
-        "Red Fox", "Red Giant Ant", "Snail", "Squirrel"
-    },
-    ["Divine"] = {
-        "Dragonfly", "Honey Bee", "Bear Bee", "Petal Bee", "Queen Bee"
-    },
-    ["Anti‑Bee"] = {
-        "Wasp", "Tarantula Hawk", "Moth", "Butterfly", "Disco Bee"
-    },
-    ["Lunar Glow"] = {
-        "Hedgehog", "Kiwi", "Frog", "Mole", "Moon Cat", "Blood Kiwi",
-        "Echo Frog", "Night Owl", "Raccoon"
-    },
-    ["Unobtainable"] = {
-        "Panda", "Blood Hedgehog", "Chicken Zombie", "Firefly",
-        "Owl", "Golden Bee", "Cooked Owl", "Blood Owl"
-    }
+    ["Common"] = {"Bunny", "Dog", "Golden Lab"},
+    ["Uncommon"] = {"Black Bunny", "Cat", "Chicken", "Deer"},
+    ["Rare"] = {"Monkey", "Orange Tabby", "Pig", "Rooster", "Spotted Deer"},
+    ["Legendary"] = {"Cow", "Polar Bear", "Sea Otter", "Silver Monkey", "Turtle"},
+    ["Mythical"] = {"Brown Mouse", "Caterpillar", "Giant Ant", "Grey Mouse", "Praying Mantis", "Red Fox", "Red Giant Ant", "Snail", "Squirrel"},
+    ["Divine"] = {"Dragonfly", "Honey Bee", "Bear Bee", "Petal Bee", "Queen Bee"},
+    ["Anti‑Bee"] = {"Wasp", "Tarantula Hawk", "Moth", "Butterfly", "Disco Bee"},
+    ["Lunar Glow"] = {"Hedgehog", "Kiwi", "Frog", "Mole", "Moon Cat", "Blood Kiwi", "Echo Frog", "Night Owl", "Raccoon"},
+    ["Unobtainable"] = {"Panda", "Blood Hedgehog", "Chicken Zombie", "Firefly", "Owl", "Golden Bee", "Cooked Owl", "Blood Owl"}
 }
 
--- UI settings
 local spinInterval = 10
 local active = true
-local soundId = "rbxassetid://12222124" -- pop sound
+local soundId = "rbxassetid://12222124"
 
--- Create ScreenGui
+-- Create GUI
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "BloodEggRandomizerGUI"
+gu...":
+    }
+  ]
+}
 
 -- Dropdown for categories
 local categories = {}
