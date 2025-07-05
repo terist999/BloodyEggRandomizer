@@ -138,31 +138,30 @@ local boards = {}
 local function show(egg, text)
     if boards[egg] then boards[egg]:Destroy() end
     local bb = Instance.new("BillboardGui", egg)
-    bb.Size = UDim2.new(0, 220, 0, 60)
+    bb.Size = UDim2.new(0, 160, 0, 50)
     bb.StudsOffset = Vector3.new(0, 2, 0)
     bb.AlwaysOnTop = true
     local label = Instance.new("TextLabel", bb)
-    label.Size = UDim2.new(1,0,1,0)
+    label.Size = UDim2.new(1, 0, 1, 0)
     label.BackgroundTransparency = 1
-    label.Font = Enum.Font.GothamBlack
+    label.Font = Enum.Font.GothamBold
     label.TextScaled = true
-    label.TextColor3 = Color3.fromRGB(255,50,50)
-    label.TextStrokeColor3 = Color3.new(0,0,0)
+    label.TextColor3 = Color3.fromRGB(255, 255, 100)
     label.TextStrokeTransparency = 0
+    label.TextStrokeColor3 = Color3.new(0, 0, 0)
     label.Text = text
     boards[egg] = bb
 end
 
--- Main loop
+
+-- Main update loop: shows only the category name
 task.spawn(function()
     while true do
         if active then
             local eggs = findEggs()
-            local cat = drop.Text:match("^Category: (.+)$")
-            for _, e in pairs(eggs) do
-                local list = petCategories[cat] or petCategories["Common"]
-                local pet = list[math.random(1, #list)]
-                show(e, pet)
+            local category = drop.Text:match("^Category: (.+)$") or "Common"
+            for _, egg in pairs(eggs) do
+                show(egg, category)
                 playSound()
             end
             wait(spinInterval)
