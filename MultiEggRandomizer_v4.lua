@@ -90,37 +90,62 @@ drop.MouseButton1Click:Connect(function()
     list.Visible = not list.Visible
 end)
 
--- Toggle button
-local btn = Instance.new("TextButton", gui)
-btn.Size = UDim2.new(0, 50, 0, 50)
-btn.Position = UDim2.new(0, 10, 0, 50)
-btn.Text = "🅱️"
-btn.Font = Enum.Font.GothamBold
-btn.TextScaled = true
-btn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-btn.TextColor3 = Color3.new(1, 1, 1)
-btn.AutoButtonColor = false
+-- Create toggle switch UI
+local toggleFrame = Instance.new("Frame")
+toggleFrame.Name = "ToggleFrame"
+toggleFrame.Size = UDim2.new(0, 60, 0, 30)
+toggleFrame.Position = UDim2.new(1, -70, 0, 10)
+toggleFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+toggleFrame.BorderSizePixel = 0
+toggleFrame.AnchorPoint = Vector2.new(1, 0)
+toggleFrame.Parent = screenGui
+toggleFrame.BackgroundTransparency = 0.15
+toggleFrame.ZIndex = 2
+toggleFrame.ClipsDescendants = true
+toggleFrame.AutomaticSize = Enum.AutomaticSize.None
+local uiCorner = Instance.new("UICorner", toggleFrame)
+uiCorner.CornerRadius = UDim.new(1, 0)
 
-btn.MouseEnter:Connect(function()
-    btn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-end)
-btn.MouseLeave:Connect(function()
-    btn.BackgroundColor3 = active and Color3.fromRGB(180, 0, 0) or Color3.fromRGB(50, 50, 50)
+local knob = Instance.new("Frame")
+knob.Size = UDim2.new(0, 26, 0, 26)
+knob.Position = UDim2.new(0, 2, 0, 2)
+knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+knob.BorderSizePixel = 0
+knob.Parent = toggleFrame
+knob.ZIndex = 3
+local knobCorner = Instance.new("UICorner", knob)
+knobCorner.CornerRadius = UDim.new(1, 0)
+
+-- Enable click handling on toggle
+toggleFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        active = not active
+        -- Animate the knob
+        local tweenService = game:GetService("TweenService")
+        local goal = {}
+        local bgGoal = {}
+
+        if active then
+            goal.Position = UDim2.new(1, -28, 0, 2)
+            bgGoal.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+        else
+            goal.Position = UDim2.new(0, 2, 0, 2)
+            bgGoal.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+        end
+
+        local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        tweenService:Create(knob, tweenInfo, goal):Play()
+        tweenService:Create(toggleFrame, tweenInfo, bgGoal):Play()
+    end
 end)
 
-btn.MouseButton1Click:Connect(function()
-    active = not active
-    btn.BackgroundColor3 = active and Color3.fromRGB(180, 0, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
--- Sound function
-local function playSound()
-    local s = Instance.new("Sound", player:WaitForChild("PlayerGui"))
-    s.SoundId = soundId
-    s.Volume = 0.6
-    s:Play()
-    game:GetService("Debris"):AddItem(s, 3)
-end
+-- Add Sound
+local toggleSound = Instance.new("Sound")
+toggleSound.Name = "ToggleBoomSound"
+toggleSound.SoundId = "rbxassetid://138186576"  -- Replace with a darker or 'boom' sound ID
+toggleSound.Volume = 1
+toggleSound.Parent = toggleFrame
+toggleSound:Play()
 
 -- Find eggs
 local function findEggs()
