@@ -1,7 +1,7 @@
 -- MultiEggRandomizer_v4.lua
 -- Created by Blood.lust (@terist999)
 -- Includes Common, Uncommon, Rare, Legendary, Mythical, Divine, Anti-Bee, Lunar Glow, Unobtainable categories
--- Dropdown to select pet category, plus toggle (🅱️), sound, and 10s timer
+-- Dropdown to select pet category, plus toggle (𝕱), sound, and 10s timer
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -98,7 +98,7 @@ toggleFrame.Position = UDim2.new(1, -70, 0, 10)
 toggleFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 toggleFrame.BorderSizePixel = 0
 toggleFrame.AnchorPoint = Vector2.new(1, 0)
-toggleFrame.Parent = screenGui
+toggleFrame.Parent = gui
 toggleFrame.BackgroundTransparency = 0.15
 toggleFrame.ZIndex = 2
 toggleFrame.ClipsDescendants = true
@@ -117,53 +117,64 @@ local knobCorner = Instance.new("UICorner", knob)
 knobCorner.CornerRadius = UDim.new(1, 0)
 
 -- Enable click handling on toggle
+local TweenService = game:GetService("TweenService")
 toggleFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         active = not active
-        -- Animate the knob
-        local tweenService = game:GetService("TweenService")
+
         local goal = {}
         local bgGoal = {}
 
         if active then
             goal.Position = UDim2.new(1, -28, 0, 2)
             bgGoal.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+            toggleFrame:FindFirstChild("ToggleOnBoom"):Play()
         else
             goal.Position = UDim2.new(0, 2, 0, 2)
             bgGoal.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+            toggleFrame:FindFirstChild("ToggleOffDoom"):Play()
         end
 
         local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-        tweenService:Create(knob, tweenInfo, goal):Play()
-        tweenService:Create(toggleFrame, tweenInfo, bgGoal):Play()
+        TweenService:Create(knob, tweenInfo, goal):Play()
+        TweenService:Create(toggleFrame, tweenInfo, bgGoal):Play()
     end
 end)
 
--- Setup for toggle sound effects
+-- Toggle sounds
 local toggleOnSound = Instance.new("Sound")
 toggleOnSound.Name = "ToggleOnBoom"
-toggleOnSound.SoundId = "rbxassetid://9118823102"  -- Deep bass boom (on)
+toggleOnSound.SoundId = "rbxassetid://9118823102"
 toggleOnSound.Volume = 1
 toggleOnSound.Parent = toggleFrame
 
 local toggleOffSound = Instance.new("Sound")
 toggleOffSound.Name = "ToggleOffDoom"
-toggleOffSound.SoundId = "rbxassetid://130790104"  -- Dark impact (off)
+toggleOffSound.SoundId = "rbxassetid://130790104"
 toggleOffSound.Volume = 1
 toggleOffSound.Parent = toggleFrame
+
+-- Sound function
+local function playSound()
+    local sound = Instance.new("Sound", player:WaitForChild("PlayerGui"))
+    sound.SoundId = soundId
+    sound.Volume = 1
+    sound:Play()
+    game:GetService("Debris"):AddItem(sound, 2)
+end
 
 -- Find eggs
 local function findEggs()
     local eggs = {}
     for _, o in pairs(workspace:GetDescendants()) do
         if o:IsA("BasePart") and o.Name:lower():find("egg") then
-            eggs[#eggs+1] = o
+            table.insert(eggs, o)
         end
     end
     return eggs
 end
 
--- Billboard handling
+-- Billboard
 local boards = {}
 local function show(egg, text)
     if boards[egg] then boards[egg]:Destroy() end
@@ -183,20 +194,21 @@ local function show(egg, text)
     boards[egg] = bb
 end
 
-
--- Main update loop: shows only the category name
-task.spawn(function()
-    while true do
-        if active then
-            local eggs = findEggs()
-            local category = drop.Text:match("^Category: (.+)$") or "Common"
+-- Main loop
+while true do
+    if active then
+        local eggs = findEggs()
+        local category = drop.Text:match("^Category: (.+)$") or "Common"
+        local pets = petCategories[category]
+        if pets then
             for _, egg in pairs(eggs) do
-                show(egg, category)
+                local pet = pets[math.random(1, #pets)]
+                show(egg, pet .. " (" .. category .. ")")
                 playSound()
             end
-            wait(spinInterval)
-        else
-            wait(1)
         end
+        task.wait(spinInterval)
+    else
+        task.wait(1)
     end
-end)
+end
