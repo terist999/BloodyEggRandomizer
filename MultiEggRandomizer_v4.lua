@@ -139,13 +139,18 @@ toggleFrame.InputBegan:Connect(function(input)
     end
 end)
 
--- Add Sound
-local toggleSound = Instance.new("Sound")
-toggleSound.Name = "ToggleBoomSound"
-toggleSound.SoundId = "rbxassetid://138186576"  -- Replace with a darker or 'boom' sound ID
-toggleSound.Volume = 1
-toggleSound.Parent = toggleFrame
-toggleSound:Play()
+-- Setup for toggle sound effects
+local toggleOnSound = Instance.new("Sound")
+toggleOnSound.Name = "ToggleOnBoom"
+toggleOnSound.SoundId = "rbxassetid://9118823102"  -- Deep bass boom (on)
+toggleOnSound.Volume = 1
+toggleOnSound.Parent = toggleFrame
+
+local toggleOffSound = Instance.new("Sound")
+toggleOffSound.Name = "ToggleOffDoom"
+toggleOffSound.SoundId = "rbxassetid://130790104"  -- Dark impact (off)
+toggleOffSound.Volume = 1
+toggleOffSound.Parent = toggleFrame
 
 -- Find eggs
 local function findEggs()
